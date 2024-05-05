@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="zina.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"> </script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <img src="./image/grid.png" alt="Menu" class="Menu">
+
+        <h2>Le carnet d'adresses local</h3>
+    </header>
+    <div class="container">
+        <div class="button-container">
+            <h1>Gérer la liste de Contact</h1>
+            <div class="buttons">
+                <button id="add-contact-btn"><img alt="plus" src="./image/add.png"/></button>
+                <button id="clear-all-btn"><img alt="suprime" src="./image/delete.png"/></button>
+            </div>
+        </div>
+        <div class="details">
+            <div class="left" id="contact-list">
+                <h2>Contacts enregistrés</h2>
+                <p id="nocontact">Aucun contact enregistré</p>
+            </div>
+            <div class="left" id="contact-details" style="display: none;">
+                <h2>Détail du contact</h2>
+                
+            </div>
+            <div class="right" id="contact-form" style="display: none;">
+                <form action="#" id="add-contact-form">
+                  <fieldset>
+                    <legend> Saisie/modification d'un contact </legend>
+                    <label for="civilite">Civilité:</label>
+                    <select id="civilite" name="civilite">
+                        <option value="Madame">Madame</option>
+                        <option value="Mademoiselle">Mademoiselle</option>
+                        <option value="Monsieur">Monsieur</option>
+                    </select>
+                    <label for="nom">Nom:</label>
+                    <input type="text" id="nom" name="nom" required>
+                    <label for="prenom">Prénom:</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                    <label for="telephone">Numéro de téléphone:</label>
+                    <input type="tel" id="telephone" name="telephone" required>
+                    <button id="save-contact-btn" type="submit">Enregistrer</button>
+                    <button type="button" id="clear-form-btn">Effacer</button>
+                    <button type="button" id="clear-contact-btn">Delete Contact</button>
+                  </fieldset>
+                </form>
+              </div>
+        </div>
+    </div>
+</body>
+</html>
