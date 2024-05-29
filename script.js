@@ -2,7 +2,6 @@ function init() {
     getContacts();
     document.getElementById('add-contact-btn').addEventListener('click', showFormAjout);
     document.getElementById('save-contact-btn').addEventListener('click', EnregistrerContact);
-    document.getElementById('clear-contact-btn').addEventListener('click', suppSelectedContactBox);
     document.getElementById('clear-form-btn').addEventListener('click', suppForm);
     document.getElementById('clear-all-btn').addEventListener('click', suppAllContacts);
 }
@@ -122,7 +121,6 @@ function EnregistrerContact() {
         return;
     }
 
-    // Si la validation réussit et le contact n'existe pas déjà
     var newContact = { 
         id: generateRandomId(), 
         civilite: civilite, 
@@ -134,7 +132,6 @@ function EnregistrerContact() {
     contacts.push(newContact);
     localStorage.setItem('contacts', JSON.stringify(contacts));
 
-    // Mettez à jour la liste des contacts uniquement si la validation a réussi
     getContacts();
     showContactDetails(newContact); 
     suppForm();
@@ -191,6 +188,9 @@ function showEditForm(contact) {
     document.getElementById('save-contact-btn').addEventListener('click', function() {
         modifierContact(contact);
     });
+    document.getElementById('clear-contact-btn').addEventListener('click', function() {
+        suppSelectedContactBox(contact);
+    });
     document.getElementById('contact-form').style.display = 'block';
 }
 
@@ -219,12 +219,16 @@ function generateRandomId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-function suppSelectedContactBox() {
-    var clickedContactBox = document.querySelector('.clicked');
-    if (clickedContactBox) {
-        clickedContactBox.parentNode.removeChild(clickedContactBox);
-        document.getElementById('contact-form').style.display = 'none';
-    }
+function suppSelectedContactBox(contact) {
+    var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    var index = contacts.findIndex(function(item) {
+        return item.id === contact.id;
+    });
+    contacts.splice(index, 1); 
+    localStorage.setItem('contacts', JSON.stringify(contacts)); 
+    getContacts(); 
+    adjustLeftDivHeight();
+    document.getElementById('contact-form').style.display = 'none';
 }
 
 
