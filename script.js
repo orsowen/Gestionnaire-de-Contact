@@ -1,7 +1,6 @@
 function init() {
     getContacts();
     document.getElementById('add-contact-btn').addEventListener('click', showFormAjout);
-    document.getElementById('save-contact-btn').addEventListener('click', EnregistrerContact);
     document.getElementById('clear-form-btn').addEventListener('click', suppForm);
     document.getElementById('clear-all-btn').addEventListener('click', suppAllContacts);
 }
@@ -104,7 +103,8 @@ function validatePhoneNumber(phoneNumber) {
     return phoneRegex.test(phoneNumber);
 }
 
-function EnregistrerContact() {
+function EnregistrerContact(event) {
+    event.preventDefault();
     var civilite = document.getElementById('civilite').value;
     var nom = document.getElementById('nom').value;
     var prenom = document.getElementById('prenom').value;
@@ -133,7 +133,7 @@ function EnregistrerContact() {
     localStorage.setItem('contacts', JSON.stringify(contacts));
 
     getContacts();
-    showContactDetails(newContact); 
+    document.getElementById('contact-form').style.display = 'none';
     suppForm();
 }
 
@@ -153,29 +153,38 @@ function suppAllContacts() {
 }
 
 function showContactDetails(contact) {
-    document.getElementById('contact-form').style.display = 'none';
-    document.getElementById('contact-details').style.display = 'block';
+    var contactList = document.querySelectorAll('.contact');
+    var isContactClicked = false;
+
+    contactList.forEach(function(element) {
+        if (element.classList.contains('clicked')) {
+            isContactClicked = true;
+        }
+    });
+
     var detailsDiv = document.getElementById('contact-details');
-    var existingDetails = detailsDiv.querySelector('.contact-details-item');
-    if (existingDetails) {
-        existingDetails.innerHTML = contact.civilite + ' ' +
-            contact.prenom + ' ' + contact.nom.toUpperCase()+ '</p>' +
-            '<p>Tel: ' + contact.telephone + '</p>' +
-            '<button id="edit-contact-btn">Editer le contact</button>';
+
+
+    if (isContactClicked) {
+        document.getElementById('contact-form').style.display = 'none';
+        detailsDiv.style.display = 'block';
     } else {
-        var newDetails = document.createElement('div');
-        newDetails.classList.add('contact-details-item');
-        newDetails.innerHTML = '<p>' + contact.civilite + ' ' +
-            contact.prenom + ' ' + contact.nom .toUpperCase()  + '</p>' +
-            '<p>Tel: ' + contact.telephone + '</p>' +
-            '<button id="edit-contact-btn">Editer le contact</button>';
-        detailsDiv.appendChild(newDetails);
+        document.getElementById('contact-form').style.display = 'none';
+        detailsDiv.style.display = 'none';
     }
+
+    detailsDiv.innerHTML = '<div class="contact-details-item">' +
+        '<p>' + contact.civilite + ' ' + contact.prenom + ' ' + contact.nom.toUpperCase() + '</p>' +
+        '<p>Tel: ' + contact.telephone + '</p>' +
+        '<button id="edit-contact-btn">Editer le contact</button>' +
+        '</div>';
+
     var editButton = detailsDiv.querySelector('#edit-contact-btn');
     editButton.addEventListener('click', function() {
         showEditForm(contact);
     });
 }
+
 
 function showEditForm(contact) {
     document.getElementById('clear-contact-btn').style.display = 'block';
