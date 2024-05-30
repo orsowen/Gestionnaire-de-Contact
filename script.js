@@ -1,10 +1,11 @@
+//fonction initialisation 
 function init() {
     getContacts();
     document.getElementById('add-contact-btn').addEventListener('click', showFormAjout);
     document.getElementById('clear-form-btn').addEventListener('click', suppForm);
     document.getElementById('clear-all-btn').addEventListener('click', suppAllContacts);
 }
-
+// function pour adjustleftdivheight
 function adjustLeftDivHeight() {
     var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     var contactCount = contacts.length;
@@ -15,12 +16,12 @@ function adjustLeftDivHeight() {
         leftDiv.style.maxHeight = '101.5px';
     }
 }
-
+//function get contacts
 function getContacts() {
     var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     afficherContacts(contacts);
 }
-
+//function showformAjout
 function showFormAjout() {
     var contactForm = document.getElementById('contact-form');
     document.getElementById('clear-contact-btn').style.display = 'none';
@@ -45,7 +46,7 @@ function showFormAjout() {
         contactForm.style.display = 'none';
     }
 }
-
+//function affichercontacts
 function afficherContacts(contacts) {
     var contactList = document.getElementById('contact-list');
     contacts.sort(function(a, b) {
@@ -97,12 +98,12 @@ function afficherContacts(contacts) {
         });
     } 
 }
-
+// function validatephonenumber
 function validatePhoneNumber(phoneNumber) {
     var phoneRegex = /^\d{8}$/;
     return phoneRegex.test(phoneNumber);
 }
-
+//function Enregistre Contact
 function EnregistrerContact(event) {
     event.preventDefault();
     var civilite = document.getElementById('civilite').value;
@@ -115,14 +116,16 @@ function EnregistrerContact(event) {
         return;
     }
 
-    var contactExists = $('.contact-box span:contains("' + prenom + ' ' + nom + '")').length > 0;
+    var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    var contactExists = contacts.some(function (contact) {
+        return contact.telephone === tel;
+    });
     if (contactExists) {
         alert('Ce contact existe déjà.');
         return;
     }
 
     var newContact = { 
-        id: generateRandomId(), 
         civilite: civilite, 
         nom: nom, 
         prenom: prenom, 
@@ -139,11 +142,11 @@ function EnregistrerContact(event) {
 
 
 
-
+//function suppForm
 function suppForm() {
     document.getElementById('add-contact-form').reset();
 }
-
+// functopn suppallcontacts
 function suppAllContacts() {
     localStorage.removeItem('contacts');
     getContacts();
@@ -151,7 +154,7 @@ function suppAllContacts() {
     document.getElementById('contact-form').style.display = 'none';
     document.getElementById('contact-details').style.display = 'none';
 }
-
+//function showcontatdetails
 function showContactDetails(contact) {
     var contactList = document.querySelectorAll('.contact');
     var isContactClicked = false;
@@ -185,7 +188,7 @@ function showContactDetails(contact) {
     });
 }
 
-
+//fonction showeditform
 function showEditForm(contact) {
     document.getElementById('clear-contact-btn').style.display = 'block';
     document.getElementById('contact-details').style.display = 'none';
@@ -202,7 +205,7 @@ function showEditForm(contact) {
     });
     document.getElementById('contact-form').style.display = 'block';
 }
-
+//fonction modifier contact
 function modifierContact(contact) {
     contact.civilite = document.getElementById('civilite').value;
     contact.nom = document.getElementById('nom').value;
@@ -214,7 +217,7 @@ function modifierContact(contact) {
     }
     var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     var index = contacts.findIndex(function(item) {
-        return item.id === contact.id;
+        return item.telephone === contact.telephone;
     });
     contacts[index] = contact;
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -224,14 +227,11 @@ function modifierContact(contact) {
     document.getElementById('contact-form').style.display = 'none';
 
 }
-function generateRandomId() {
-    return '_' + Math.random().toString(36).substr(2, 9);
-}
-
+//fonction supp selected contact box
 function suppSelectedContactBox(contact) {
     var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     var index = contacts.findIndex(function(item) {
-        return item.id === contact.id;
+        return item.telephone === contact.telephone;
     });
     contacts.splice(index, 1); 
     localStorage.setItem('contacts', JSON.stringify(contacts)); 
@@ -240,5 +240,5 @@ function suppSelectedContactBox(contact) {
     document.getElementById('contact-form').style.display = 'none';
 }
 
-
+// fonction main
 document.addEventListener('DOMContentLoaded', init);
